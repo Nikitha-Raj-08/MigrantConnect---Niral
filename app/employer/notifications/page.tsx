@@ -5,10 +5,14 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
-import { Bell, Briefcase, FileText, AlertCircle, CheckCircle, Users, DollarSign, Building2 } from "lucide-react"
+import { Bell, Briefcase, FileText, AlertCircle, CheckCircle, Users, Building2 } from "lucide-react"
 import Link from "next/link"
+import { toast } from "@/hooks/use-toast"
 
 export default function EmployerNotificationsPage() {
+  // Remove wage-related notifications from the employer notifications page
+
+  // Update the notifications array to filter out wage-related items
   const notifications = [
     {
       id: 1,
@@ -36,15 +40,6 @@ export default function EmployerNotificationsPage() {
       date: "2 days ago",
       read: false,
       link: "/employer/jobs/2",
-    },
-    {
-      id: 4,
-      title: "Payment Confirmation",
-      description: "Payment of ₹15,000 to Manoj Singh has been processed",
-      type: "payment",
-      date: "1 week ago",
-      read: true,
-      link: "/employer/wages",
     },
     {
       id: 5,
@@ -128,24 +123,6 @@ export default function EmployerNotificationsPage() {
       link: "/employer/jobs/1/applicants",
     },
     {
-      id: 14,
-      title: "Payment Due Reminder",
-      description: "Payment of ₹12,000 to Kamlesh is due in 3 days.",
-      type: "payment",
-      date: "5 days ago",
-      read: false,
-      link: "/employer/wages",
-    },
-    {
-      id: 15,
-      title: "Payment Processed",
-      description: "Payment of ₹18,000 to Rakesh has been processed successfully.",
-      type: "payment",
-      date: "6 days ago",
-      read: true,
-      link: "/employer/wages",
-    },
-    {
       id: 16,
       title: "Profile Updated Successfully",
       description: "Your company profile has been updated successfully.",
@@ -167,6 +144,10 @@ export default function EmployerNotificationsPage() {
         return notification
       }),
     )
+    toast({
+      title: "Notification marked as read",
+      description: "The notification has been marked as read.",
+    })
   }
 
   const markAllAsRead = () => {
@@ -175,14 +156,16 @@ export default function EmployerNotificationsPage() {
         return { ...notification, read: true }
       }),
     )
+    toast({
+      title: "All notifications marked as read",
+      description: "All notifications have been marked as read.",
+    })
   }
 
   const getIcon = (type: string) => {
     switch (type) {
       case "job":
         return <Briefcase className="h-5 w-5" />
-      case "payment":
-        return <DollarSign className="h-5 w-5" />
       case "grievance":
         return <AlertCircle className="h-5 w-5" />
       case "welfare":
@@ -200,8 +183,6 @@ export default function EmployerNotificationsPage() {
     switch (type) {
       case "job":
         return "bg-blue-100 text-blue-600"
-      case "payment":
-        return "bg-green-100 text-green-600"
       case "grievance":
         return "bg-orange-100 text-orange-600"
       case "welfare":
@@ -244,7 +225,6 @@ export default function EmployerNotificationsPage() {
           <TabsTrigger value="applications">Applications</TabsTrigger>
           <TabsTrigger value="jobs">Jobs</TabsTrigger>
           <TabsTrigger value="grievances">Grievances</TabsTrigger>
-          <TabsTrigger value="payments">Payments</TabsTrigger>
         </TabsList>
         <TabsContent value="all" className="space-y-4">
           {notificationState.length > 0 ? (
@@ -429,53 +409,6 @@ export default function EmployerNotificationsPage() {
               </div>
               <h3 className="mt-4 text-lg font-semibold">No grievance notifications</h3>
               <p className="mt-2 text-sm text-muted-foreground">You have no new grievance notifications.</p>
-            </div>
-          )}
-        </TabsContent>
-        <TabsContent value="payments" className="space-y-4">
-          {notificationState.filter((n) => n.type === "payment").length > 0 ? (
-            <div className="grid gap-4">
-              {notificationState
-                .filter((n) => n.type === "payment")
-                .map((notification) => (
-                  <Card
-                    key={notification.id}
-                    className={`transition-colors ${!notification.read ? "border-l-4 border-l-primary" : ""}`}
-                  >
-                    <CardHeader className="pb-2">
-                      <div className="flex justify-between items-start">
-                        <div className="flex items-center gap-2">
-                          <div className={`rounded-full p-2 ${getIconBg(notification.type)}`}>
-                            {getIcon(notification.type)}
-                          </div>
-                          <CardTitle className="text-lg">{notification.title}</CardTitle>
-                        </div>
-                        <CardDescription>{notification.date}</CardDescription>
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <p>{notification.description}</p>
-                    </CardContent>
-                    <CardFooter className="flex justify-between">
-                      <Button variant="outline" asChild>
-                        <Link href={notification.link}>View Details</Link>
-                      </Button>
-                      {!notification.read && (
-                        <Button variant="ghost" onClick={() => markAsRead(notification.id)}>
-                          Mark as Read
-                        </Button>
-                      )}
-                    </CardFooter>
-                  </Card>
-                ))}
-            </div>
-          ) : (
-            <div className="rounded-md border p-8 text-center">
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-muted">
-                <DollarSign className="h-6 w-6 text-muted-foreground" />
-              </div>
-              <h3 className="mt-4 text-lg font-semibold">No payment notifications</h3>
-              <p className="mt-2 text-sm text-muted-foreground">You have no new payment notifications.</p>
             </div>
           )}
         </TabsContent>

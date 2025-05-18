@@ -105,10 +105,11 @@ export default function EmployerDashboard() {
         </Link>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-3">
-        {/* Company Profile Card */}
-        <Card>
-          <CardHeader className="flex flex-row items-center gap-4">
+      {/* Top row with company profile and active jobs */}
+      <div className="grid gap-4 grid-cols-12">
+        {/* Company Profile Card - wider */}
+        <Card className="col-span-9">
+          <CardHeader className="flex flex-row items-center gap-4 py-4">
             <Avatar className="h-16 w-16">
               <AvatarImage src="/placeholder.svg?height=64&width=64" alt={employer.name} />
               <AvatarFallback>
@@ -123,15 +124,19 @@ export default function EmployerDashboard() {
               </div>
             </div>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              <div className="text-sm font-medium">Contact Person</div>
-              <div className="text-sm">{employer.contactPerson}</div>
-              <div className="text-sm font-medium mt-2">Industry</div>
-              <div className="text-sm">{employer.industry}</div>
+          <CardContent className="py-2">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <div className="text-sm font-medium">Contact Person</div>
+                <div className="text-sm">{employer.contactPerson}</div>
+              </div>
+              <div>
+                <div className="text-sm font-medium">Industry</div>
+                <div className="text-sm">{employer.industry}</div>
+              </div>
             </div>
           </CardContent>
-          <CardFooter>
+          <CardFooter className="py-3">
             <Link href="/employer/profile">
               <Button variant="outline" size="sm">
                 View Company Profile
@@ -141,36 +146,18 @@ export default function EmployerDashboard() {
         </Card>
 
         {/* Active Jobs Card */}
-        <Card>
-          <CardHeader className="pb-2">
+        <Card className="col-span-3">
+          <CardHeader className="pb-2 pt-4">
             <CardTitle className="text-sm font-medium">Active Jobs</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="py-2">
             <div className="text-2xl font-bold">{postedJobs.filter((job) => job.status === "Active").length}</div>
             <p className="text-xs text-muted-foreground">{postedJobs.length} total jobs posted</p>
           </CardContent>
-          <CardFooter className="pt-0">
+          <CardFooter className="pt-0 pb-3">
             <Link href="/employer/jobs">
               <Button variant="link" size="sm" className="px-0">
                 View All Jobs
-              </Button>
-            </Link>
-          </CardFooter>
-        </Card>
-
-        {/* Wage Management Summary Card */}
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Wage Management</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">₹30,000</div>
-            <p className="text-xs text-muted-foreground">Total pending payments</p>
-          </CardContent>
-          <CardFooter className="pt-0">
-            <Link href="/employer/wages">
-              <Button variant="link" size="sm" className="px-0">
-                View All Payments
               </Button>
             </Link>
           </CardFooter>
@@ -226,10 +213,11 @@ export default function EmployerDashboard() {
           </CardFooter>
         </Card>
 
+        {/* Grievances Card */}
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-base font-medium">Grievances</CardTitle>
-            <AlertCircle className="h-4 w-4 text-muted-foreground" />
+          <CardHeader>
+            <CardTitle className="text-xl font-bold">Grievances</CardTitle>
+            <CardDescription>Recent worker grievances</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {grievances.length > 0 ? (
@@ -262,12 +250,15 @@ export default function EmployerDashboard() {
         </Card>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 md:grid-cols-1">
         {/* Recent Applicants Card */}
         <Card>
-          <CardHeader>
-            <CardTitle>Recent Applicants</CardTitle>
-            <CardDescription>Latest job applications</CardDescription>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0">
+            <div>
+              <CardTitle className="text-xl font-bold">Recent Applicants</CardTitle>
+              <CardDescription>Latest job applications</CardDescription>
+            </div>
+            <AlertCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent className="space-y-4">
             {recentApplicants.map((applicant) => (
@@ -302,48 +293,6 @@ export default function EmployerDashboard() {
             <Link href="/employer/applicants" className="w-full">
               <Button variant="outline" className="w-full">
                 View All Applicants
-              </Button>
-            </Link>
-          </CardFooter>
-        </Card>
-
-        {/* Wage Management Card */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Wage Management</CardTitle>
-            <CardDescription>Recent payment transactions</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="rounded-lg border p-3">
-                <div className="flex justify-between">
-                  <div className="font-medium">Rajesh Kumar</div>
-                  <Badge variant="outline">Pending</Badge>
-                </div>
-                <div className="text-sm">Construction Worker</div>
-                <div className="text-sm font-medium mt-1">₹15,000</div>
-                <div className="text-xs text-muted-foreground">Due on: 30 May 2023</div>
-                <div className="flex justify-end mt-2">
-                  <Link href="/employer/wages">
-                    <Button size="sm">Mark as Paid</Button>
-                  </Link>
-                </div>
-              </div>
-              <div className="rounded-lg border p-3">
-                <div className="flex justify-between">
-                  <div className="font-medium">Sunil Verma</div>
-                  <Badge variant="default">Paid</Badge>
-                </div>
-                <div className="text-sm">Construction Worker</div>
-                <div className="text-sm font-medium mt-1">₹15,000</div>
-                <div className="text-xs text-muted-foreground">Paid on: 15 May 2023</div>
-              </div>
-            </div>
-          </CardContent>
-          <CardFooter>
-            <Link href="/employer/wages" className="w-full">
-              <Button variant="outline" className="w-full">
-                View All Payments
               </Button>
             </Link>
           </CardFooter>

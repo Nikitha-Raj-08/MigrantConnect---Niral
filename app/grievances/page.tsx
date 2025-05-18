@@ -103,6 +103,7 @@ export default function GrievancesPage() {
       resolution: "Employer recalculated wages and paid the difference",
     },
   ]
+  \
   )
 
   // Handle form input changes for new grievance

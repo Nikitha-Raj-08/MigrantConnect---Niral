@@ -26,35 +26,141 @@ export default function GrievanceDetailPage({ params }: { params: { id: string }
   const [responseSubmitted, setResponseSubmitted] = useState(false)
   const [showAcknowledgeDialog, setShowAcknowledgeDialog] = useState(false)
   const [acknowledged, setAcknowledged] = useState(false)
-  const [grievance, setGrievance] = useState({
-    id: params.id,
-    title: "Delayed Payment Issue",
-    description:
-      "I have not received my payment for the work completed at Metro Projects from March 1-15, 2023. The payment was due on April 1, 2023, but it's been over a week and I haven't received it yet. I have contacted the employer multiple times but haven't received a clear response.",
-    status: "In Progress",
-    filedDate: "April 8, 2023",
-    employer: "Metro Projects",
-    jobTitle: "Construction Helper",
-    workPeriod: "March 1-15, 2023",
-    amountDue: "₹8,400",
-    communications: [
-      {
-        sender: "Worker",
-        message: "I have not received my payment yet. Please look into this matter.",
-        timestamp: "April 8, 2023, 10:30 AM",
+  // Update the useState initialization to use a function that looks up the grievance by ID
+  const [grievance, setGrievance] = useState(() => {
+    // This would be an API call in a real app
+    // For now, we'll use mock data based on the ID
+    const id = params.id
+
+    // Mock data for different grievances
+    const grievancesData = {
+      "1": {
+        id: "1",
+        title: "Delayed Payment Issue",
+        description:
+          "I have not received my payment for the work completed at Metro Projects from March 1-15, 2023. The payment was due on April 1, 2023, but it's been over a week and I haven't received it yet. I have contacted the employer multiple times but haven't received a clear response.",
+        status: "In Progress",
+        filedDate: "April 8, 2023",
+        employer: "Metro Projects",
+        jobTitle: "Construction Helper",
+        workPeriod: "March 1-15, 2023",
+        amountDue: "₹8,400",
+        communications: [
+          {
+            sender: "Worker",
+            message: "I have not received my payment yet. Please look into this matter.",
+            timestamp: "April 8, 2023, 10:30 AM",
+          },
+          {
+            sender: "Admin",
+            message: "We have received your grievance and are looking into it. We will contact the employer.",
+            timestamp: "April 8, 2023, 2:15 PM",
+          },
+          {
+            sender: "Admin",
+            message:
+              "We have contacted the employer and they have acknowledged the delay. They have promised to process the payment within 2 days.",
+            timestamp: "April 9, 2023, 11:45 AM",
+          },
+        ],
       },
-      {
-        sender: "Admin",
-        message: "We have received your grievance and are looking into it. We will contact the employer.",
-        timestamp: "April 8, 2023, 2:15 PM",
+      "2": {
+        id: "2",
+        title: "Safety Equipment Not Provided",
+        description:
+          "I have been working at the construction site for 2 weeks now, and despite multiple requests, I have not been provided with proper safety equipment like helmet, gloves, and safety boots. This is putting my safety at risk, especially when working at heights.",
+        status: "New",
+        filedDate: "May 22, 2023",
+        employer: "ABC Builders",
+        jobTitle: "Construction Worker",
+        workPeriod: "May 8-22, 2023",
+        amountDue: "N/A",
+        communications: [],
       },
-      {
-        sender: "Admin",
-        message:
-          "We have contacted the employer and they have acknowledged the delay. They have promised to process the payment within 2 days.",
-        timestamp: "April 9, 2023, 11:45 AM",
+      "101": {
+        id: "101",
+        title: "Unsafe Working Conditions",
+        description:
+          "Lack of safety equipment at the construction site. Workers were required to work at heights without proper harnesses or safety nets. There was also inadequate lighting in certain areas making it difficult to see potential hazards.",
+        status: "Resolved",
+        filedDate: "March 10, 2023",
+        resolvedDate: "March 25, 2023",
+        employer: "ABC Builders",
+        jobTitle: "Site Worker",
+        workPeriod: "February 15 - March 10, 2023",
+        amountDue: "N/A",
+        resolution: "Employer provided all necessary safety equipment",
+        communications: [
+          {
+            sender: "Worker",
+            message: "I'm concerned about the lack of safety equipment at the site.",
+            timestamp: "March 10, 2023, 9:15 AM",
+          },
+          {
+            sender: "Admin",
+            message: "We've notified the employer about this safety concern.",
+            timestamp: "March 11, 2023, 11:30 AM",
+          },
+          {
+            sender: "Employer",
+            message: "We will provide all necessary safety equipment by next week.",
+            timestamp: "March 15, 2023, 2:45 PM",
+          },
+          {
+            sender: "Worker",
+            message: "I've received the safety equipment. Thank you for addressing this issue.",
+            timestamp: "March 22, 2023, 10:20 AM",
+          },
+        ],
       },
-    ],
+      "102": {
+        id: "102",
+        title: "Incorrect Wage Calculation",
+        description:
+          "Overtime hours not included in January payment. I worked an additional 12 hours over the standard working hours, but these were not accounted for in my payment. I have time sheets signed by my supervisor to prove these hours.",
+        status: "Resolved",
+        filedDate: "February 5, 2023",
+        resolvedDate: "February 15, 2023",
+        employer: "Metro Projects",
+        jobTitle: "Electrician",
+        workPeriod: "January 1-31, 2023",
+        amountDue: "₹3,600 (for overtime)",
+        resolution: "Employer recalculated wages and paid the difference",
+        communications: [
+          {
+            sender: "Worker",
+            message: "My overtime hours were not included in my January payment.",
+            timestamp: "February 5, 2023, 8:45 AM",
+          },
+          {
+            sender: "Admin",
+            message: "We're reviewing your timesheet and will contact the employer.",
+            timestamp: "February 6, 2023, 1:20 PM",
+          },
+          {
+            sender: "Employer",
+            message: "We've verified the overtime hours and will process the additional payment.",
+            timestamp: "February 10, 2023, 3:30 PM",
+          },
+        ],
+      },
+    }
+
+    // Return the grievance data for the requested ID, or a default if not found
+    return (
+      grievancesData[id] || {
+        id: params.id,
+        title: "Grievance Details",
+        description: "Grievance details not found.",
+        status: "Unknown",
+        filedDate: "Unknown",
+        employer: "Unknown",
+        jobTitle: "Unknown",
+        workPeriod: "Unknown",
+        amountDue: "Unknown",
+        communications: [],
+      }
+    )
   })
 
   const handleSubmitResponse = (e: React.FormEvent) => {
@@ -88,11 +194,11 @@ export default function GrievanceDetailPage({ params }: { params: { id: string }
       <div className="flex items-center justify-between">
         <div>
           <Link
-            href="/dashboard"
+            href="/grievances"
             className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-2"
           >
             <ArrowLeft className="h-4 w-4" />
-            Back to dashboard
+            Back to grievances
           </Link>
           <h2 className="text-3xl font-bold tracking-tight">Grievance Details</h2>
           <p className="text-muted-foreground">Grievance ID: {grievance.id}</p>

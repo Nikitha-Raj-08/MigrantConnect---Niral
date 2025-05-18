@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Input } from "@/components/ui/input"
-import { ArrowLeft, Search, MessageSquare, AlertCircle, CheckCircle } from "lucide-react"
+import { ArrowLeft, Search, MessageSquare, AlertCircle, CheckCircle, ChevronDown, ChevronUp, Eye } from "lucide-react"
 import { motion } from "framer-motion"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
@@ -103,11 +103,29 @@ export default function EmployerGrievancesPage() {
   const [selectedGrievance, setSelectedGrievance] = useState<any>(null)
   const [resolutionText, setResolutionText] = useState("")
   const [resolutionSuccess, setResolutionSuccess] = useState(false)
+  const [viewDetailsDialogOpen, setViewDetailsDialogOpen] = useState(false)
+  const [viewingGrievance, setViewingGrievance] = useState<any>(null)
+
+  // Add state for showing/hiding description
+  const [expandedDescriptions, setExpandedDescriptions] = useState<Record<number, boolean>>({})
+
+  // Add toggle description function
+  const toggleDescription = (id: number) => {
+    setExpandedDescriptions((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }))
+  }
 
   const handleMarkAsResolved = (grievance: any) => {
     setSelectedGrievance(grievance)
     setResolveDialogOpen(true)
     setResolutionText("")
+  }
+
+  const handleViewDetails = (grievance: any) => {
+    setViewingGrievance(grievance)
+    setViewDetailsDialogOpen(true)
   }
 
   const submitResolution = () => {
@@ -260,7 +278,31 @@ export default function EmployerGrievancesPage() {
                     <CardContent className="space-y-4">
                       <div>
                         <h4 className="text-sm font-medium mb-1 dark:text-white">Description</h4>
-                        <p className="text-sm text-muted-foreground dark:text-gray-400">{grievance.description}</p>
+                        <p className="text-sm text-muted-foreground dark:text-gray-400">
+                          {expandedDescriptions[grievance.id]
+                            ? grievance.description
+                            : grievance.description.length > 100
+                              ? `${grievance.description.slice(0, 100)}...`
+                              : grievance.description}
+                        </p>
+                        {grievance.description.length > 100 && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="mt-1 h-8 px-2 text-xs"
+                            onClick={() => toggleDescription(grievance.id)}
+                          >
+                            {expandedDescriptions[grievance.id] ? (
+                              <>
+                                <ChevronUp className="h-3 w-3 mr-1" /> Show Less
+                              </>
+                            ) : (
+                              <>
+                                <ChevronDown className="h-3 w-3 mr-1" /> Show More
+                              </>
+                            )}
+                          </Button>
+                        )}
                       </div>
 
                       {grievance.responses && (
@@ -287,6 +329,9 @@ export default function EmployerGrievancesPage() {
                       <div className="flex gap-2">
                         <Button variant="outline" className="gap-1" onClick={() => handleMarkAsResolved(grievance)}>
                           <CheckCircle className="h-4 w-4" /> Mark as Resolved
+                        </Button>
+                        <Button variant="outline" className="gap-1" onClick={() => handleViewDetails(grievance)}>
+                          <Eye className="h-4 w-4" /> View Details
                         </Button>
                         <Link href={`/employer/grievances/${grievance.id}`}>
                           <Button className="gap-1">
@@ -337,7 +382,31 @@ export default function EmployerGrievancesPage() {
                     <CardContent className="space-y-4">
                       <div>
                         <h4 className="text-sm font-medium mb-1 dark:text-white">Description</h4>
-                        <p className="text-sm text-muted-foreground dark:text-gray-400">{grievance.description}</p>
+                        <p className="text-sm text-muted-foreground dark:text-gray-400">
+                          {expandedDescriptions[grievance.id]
+                            ? grievance.description
+                            : grievance.description.length > 100
+                              ? `${grievance.description.slice(0, 100)}...`
+                              : grievance.description}
+                        </p>
+                        {grievance.description.length > 100 && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="mt-1 h-8 px-2 text-xs"
+                            onClick={() => toggleDescription(grievance.id)}
+                          >
+                            {expandedDescriptions[grievance.id] ? (
+                              <>
+                                <ChevronUp className="h-3 w-3 mr-1" /> Show Less
+                              </>
+                            ) : (
+                              <>
+                                <ChevronDown className="h-3 w-3 mr-1" /> Show More
+                              </>
+                            )}
+                          </Button>
+                        )}
                       </div>
 
                       <div>
@@ -345,10 +414,13 @@ export default function EmployerGrievancesPage() {
                         <p className="text-sm text-muted-foreground dark:text-gray-400">{grievance.resolution}</p>
                       </div>
                     </CardContent>
-                    <CardFooter>
+                    <CardFooter className="flex justify-between">
                       <div className="text-sm text-muted-foreground dark:text-gray-400">
                         Resolved on: {grievance.resolvedDate}
                       </div>
+                      <Button variant="outline" className="gap-1" onClick={() => handleViewDetails(grievance)}>
+                        <Eye className="h-4 w-4" /> View Details
+                      </Button>
                     </CardFooter>
                   </Card>
                 </motion.div>
@@ -407,6 +479,94 @@ export default function EmployerGrievancesPage() {
                 <Button onClick={submitResolution} disabled={!resolutionText.trim()}>
                   Submit Resolution
                 </Button>
+              </DialogFooter>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* View Details Dialog */}
+      <Dialog open={viewDetailsDialogOpen} onOpenChange={setViewDetailsDialogOpen}>
+        <DialogContent className="sm:max-w-[600px] dark:bg-gray-800 dark:border-gray-700">
+          {viewingGrievance && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="dark:text-white">Grievance Details</DialogTitle>
+                <DialogDescription className="dark:text-gray-400">
+                  Full details and communication history for this grievance
+                </DialogDescription>
+              </DialogHeader>
+              <div className="space-y-4 py-4">
+                <div className="flex justify-between items-center">
+                  <h3 className="text-lg font-medium dark:text-white">{viewingGrievance.title}</h3>
+                  <Badge
+                    variant={
+                      viewingGrievance.status === "Resolved"
+                        ? "default"
+                        : viewingGrievance.status === "In Progress"
+                          ? "secondary"
+                          : "outline"
+                    }
+                    className={viewingGrievance.status === "Resolved" ? "bg-green-600" : ""}
+                  >
+                    {viewingGrievance.status}
+                  </Badge>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <p className="font-medium dark:text-gray-300">Worker</p>
+                    <p className="dark:text-gray-400">
+                      {viewingGrievance.worker} (ID: {viewingGrievance.workerId})
+                    </p>
+                  </div>
+                  <div>
+                    <p className="font-medium dark:text-gray-300">Filed Date</p>
+                    <p className="dark:text-gray-400">{viewingGrievance.filedDate}</p>
+                  </div>
+                  <div>
+                    <p className="font-medium dark:text-gray-300">Type</p>
+                    <p className="dark:text-gray-400">{viewingGrievance.type}</p>
+                  </div>
+                  {viewingGrievance.resolvedDate && (
+                    <div>
+                      <p className="font-medium dark:text-gray-300">Resolved Date</p>
+                      <p className="dark:text-gray-400">{viewingGrievance.resolvedDate}</p>
+                    </div>
+                  )}
+                </div>
+
+                <div>
+                  <p className="font-medium dark:text-gray-300 mb-1">Description</p>
+                  <p className="text-sm dark:text-gray-400">{viewingGrievance.description}</p>
+                </div>
+
+                {viewingGrievance.resolution && (
+                  <div>
+                    <p className="font-medium dark:text-gray-300 mb-1">Resolution</p>
+                    <p className="text-sm dark:text-gray-400">{viewingGrievance.resolution}</p>
+                  </div>
+                )}
+
+                {viewingGrievance.responses && viewingGrievance.responses.length > 0 && (
+                  <div>
+                    <p className="font-medium dark:text-gray-300 mb-2">Communication History</p>
+                    <div className="space-y-3">
+                      {viewingGrievance.responses.map((response: any, index: number) => (
+                        <div key={index} className="rounded-lg border p-3 dark:border-gray-700">
+                          <div className="flex justify-between">
+                            <span className="text-sm font-medium dark:text-white">{response.from}</span>
+                            <span className="text-xs text-muted-foreground dark:text-gray-400">{response.date}</span>
+                          </div>
+                          <p className="text-sm mt-1 dark:text-gray-300">{response.message}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+              <DialogFooter>
+                <Button onClick={() => setViewDetailsDialogOpen(false)}>Close</Button>
               </DialogFooter>
             </>
           )}

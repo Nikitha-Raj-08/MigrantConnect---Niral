@@ -1,5 +1,7 @@
 "use client"
 
+import type React from "react"
+
 import { useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -12,6 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { ArrowLeft, Upload, User, Plus, X } from "lucide-react"
 import { motion } from "framer-motion"
+import { CheckCircle } from "lucide-react"
 import {
   Dialog,
   DialogContent,
@@ -20,12 +23,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { toast } from "@/hooks/use-toast"
 
 export default function ProfilePage() {
   // Mock data for worker profile
   const [profile, setProfile] = useState({
-    name: "Rajesh Kumar",
+    name: "Vishaal Maria Anto",
     id: "MIG-12345",
     aadhaar: "XXXX XXXX 1234",
     dob: "1990-05-15",
@@ -55,6 +57,30 @@ export default function ProfilePage() {
   const [showLanguageDialog, setShowLanguageDialog] = useState(false)
   const [newLanguage, setNewLanguage] = useState("")
   const [languageToEdit, setLanguageToEdit] = useState<{ index: number; value: string } | null>(null)
+
+  // Add a confirmation dialog for profile updates
+
+  // Add state for the confirmation dialog
+  const [showUpdateConfirmation, setShowUpdateConfirmation] = useState(false)
+
+  // Update the handleProfileUpdate function to show the confirmation dialog
+  const handleProfileUpdate = (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+
+    // Simulate API call
+    setTimeout(() => {
+      setIsSubmitting(false)
+      setShowUpdateConfirmation(true)
+
+      // Close the dialog after a delay
+      setTimeout(() => {
+        setShowUpdateConfirmation(false)
+      }, 2000)
+    }, 1000)
+  }
+
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   // Handle skill selection
   const handleSkillSelect = (skill: string) => {
@@ -163,18 +189,6 @@ export default function ProfilePage() {
     setProfile({
       ...profile,
       employmentHistory: updatedHistory,
-    })
-  }
-
-  // Handle profile update
-  const handleProfileUpdate = () => {
-    // In a real app, you would submit the updated profile to your API
-    console.log("Updated profile:", profile)
-
-    // Show success message
-    toast({
-      title: "Profile updated",
-      description: "Your profile has been updated successfully.",
     })
   }
 
@@ -412,7 +426,9 @@ export default function ProfilePage() {
                   </div>
                 </CardContent>
                 <CardFooter>
-                  <Button onClick={handleProfileUpdate}>Update Profile</Button>
+                  <Button onClick={handleProfileUpdate} disabled={isSubmitting}>
+                    {isSubmitting ? "Updating..." : "Update Profile"}
+                  </Button>
                 </CardFooter>
               </Card>
             </TabsContent>
@@ -490,7 +506,9 @@ export default function ProfilePage() {
                   </div>
                 </CardContent>
                 <CardFooter>
-                  <Button onClick={handleProfileUpdate}>Update Profile</Button>
+                  <Button onClick={handleProfileUpdate} disabled={isSubmitting}>
+                    {isSubmitting ? "Updating..." : "Update Profile"}
+                  </Button>
                 </CardFooter>
               </Card>
             </TabsContent>
@@ -572,7 +590,9 @@ export default function ProfilePage() {
                   </Button>
                 </CardContent>
                 <CardFooter>
-                  <Button onClick={handleProfileUpdate}>Update Profile</Button>
+                  <Button onClick={handleProfileUpdate} disabled={isSubmitting}>
+                    {isSubmitting ? "Updating..." : "Update Profile"}
+                  </Button>
                 </CardFooter>
               </Card>
             </TabsContent>
@@ -621,6 +641,17 @@ export default function ProfilePage() {
               {languageToEdit ? "Save Changes" : "Add Language"}
             </Button>
           </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Profile Update Confirmation Dialog */}
+      <Dialog open={showUpdateConfirmation} onOpenChange={setShowUpdateConfirmation}>
+        <DialogContent className="sm:max-w-md">
+          <div className="flex flex-col items-center justify-center py-6 space-y-4">
+            <CheckCircle className="h-16 w-16 text-green-500" />
+            <h3 className="text-xl font-medium text-center">Profile Updated Successfully!</h3>
+            <p className="text-center text-muted-foreground">Your profile has been updated with the new information.</p>
+          </div>
         </DialogContent>
       </Dialog>
     </motion.div>

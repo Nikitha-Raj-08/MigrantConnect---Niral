@@ -31,8 +31,8 @@ export default function ApplicationsPage() {
       location: "Delhi",
       salary: "₹14,000 - ₹16,000/month",
       workingHours: "8 hours/day, 6 days/week",
-      contactPerson: "Amit Sharma",
-      contactEmail: "amit.sharma@metroprojects.com",
+      contactPerson: "Nikitha Raj",
+      contactEmail: "nikitha.raj@metroprojects.com",
       applicationNotes: "Highlighted previous experience in construction work.",
     },
     {
@@ -59,8 +59,8 @@ export default function ApplicationsPage() {
       location: "Noida",
       salary: "₹15,000 - ₹17,000/month",
       workingHours: "8 hours/day, 6 days/week",
-      contactPerson: "Priya Singh",
-      contactEmail: "priya.singh@modernhomes.com",
+      contactPerson: "Austin Prince",
+      contactEmail: "austin.prince@modernhomes.com",
       applicationNotes: "Emphasized experience with different types of paints and surface preparation.",
     },
   ]
@@ -77,8 +77,8 @@ export default function ApplicationsPage() {
       location: "Delhi",
       salary: "₹15,000 - ₹18,000/month",
       workingHours: "9 hours/day, 6 days/week",
-      contactPerson: "Rajiv Kumar",
-      contactEmail: "rajiv.kumar@abcbuilders.com",
+      contactPerson: "Leo Franklin",
+      contactEmail: "leo.franklin@abcbuilders.com",
       applicationNotes: "Highlighted physical strength and previous construction experience.",
     },
     {
@@ -92,8 +92,8 @@ export default function ApplicationsPage() {
       location: "Ghaziabad",
       salary: "₹14,000 - ₹16,000/month",
       workingHours: "8 hours/day, 6 days/week",
-      contactPerson: "Sanjay Verma",
-      contactEmail: "sanjay.verma@waterworks.com",
+      contactPerson: "Adithiya Verma",
+      contactEmail: "adhithiya.verma@waterworks.com",
       applicationNotes: "Mentioned basic knowledge of plumbing tools and systems.",
     },
   ]

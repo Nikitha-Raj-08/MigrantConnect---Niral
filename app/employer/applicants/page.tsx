@@ -21,7 +21,7 @@ export default function ApplicantsPage() {
   const applicants = [
     {
       id: 101,
-      name: "Rajesh Kumar",
+      name: "Vishaal",
       jobTitle: "Construction Worker",
       skills: ["Construction", "Carpentry"],
       status: "New",
@@ -29,7 +29,7 @@ export default function ApplicantsPage() {
     },
     {
       id: 102,
-      name: "Sunil Verma",
+      name: "Leo Franklin",
       jobTitle: "Construction Worker",
       skills: ["Construction", "Painting"],
       status: "Shortlisted",
@@ -37,7 +37,7 @@ export default function ApplicantsPage() {
     },
     {
       id: 103,
-      name: "Manoj Singh",
+      name: "Nikitha Raj",
       jobTitle: "Site Supervisor",
       skills: ["Construction", "Management"],
       status: "Interviewed",
@@ -45,7 +45,7 @@ export default function ApplicantsPage() {
     },
     {
       id: 104,
-      name: "Dinesh Patel",
+      name: "Austin Prince",
       jobTitle: "Electrician",
       skills: ["Electrical", "Wiring"],
       status: "Rejected",

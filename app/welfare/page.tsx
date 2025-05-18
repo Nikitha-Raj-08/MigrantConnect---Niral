@@ -67,6 +67,26 @@ export default function WelfareSchemesPage() {
     },
   ]
 
+  // Update the welfare schemes to show some as not eligible
+
+  // Update the isEligible function to make some schemes not eligible
+  const isEligible = (schemeId: number) => {
+    // Make schemes with even IDs not eligible, odd IDs eligible
+    return schemeId % 2 !== 0
+  }
+
+  // Update the getEligibilityStatus function to use the updated isEligible function
+  const getEligibilityStatus = (schemeId: number) => {
+    return isEligible(schemeId) ? (
+      <Badge className="bg-green-500">Eligible</Badge>
+    ) : (
+      <Badge variant="outline" className="text-red-500 border-red-500">
+        Not Eligible
+      </Badge>
+    )
+  }
+
+  // Update the otherSchemes array to show different eligibility statuses
   const otherSchemes = [
     {
       id: 101,
@@ -135,15 +155,16 @@ export default function WelfareSchemesPage() {
     }, 1500)
   }
 
+  // Update the eligibilityResult to sometimes return not eligible
   const checkEligibility = (scheme: any) => {
     setCurrentScheme(scheme)
     setCheckingEligibility(true)
     setEligibilityResult(null)
 
-    // Simulate eligibility check
+    // Simulate eligibility check with more realistic outcomes
     setTimeout(() => {
-      // Random eligibility result for demonstration
-      const isEligible = Math.random() > 0.5
+      // Use scheme ID to determine eligibility (odd IDs are eligible, even IDs are not)
+      const isEligible = scheme.id % 2 === 1
       setEligibilityResult({
         eligible: isEligible,
         message: isEligible

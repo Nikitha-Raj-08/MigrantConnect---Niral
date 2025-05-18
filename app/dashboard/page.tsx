@@ -15,7 +15,7 @@ export default function WorkerDashboard() {
 
   // Mock data for worker dashboard
   const worker = {
-    name: "Rajesh Kumar",
+    name: "Vishaal Maria Anto",
     id: "MIG-12345",
     location: "Delhi, India",
     skills: ["Construction", "Carpentry", "Painting"],
@@ -91,13 +91,6 @@ export default function WorkerDashboard() {
     },
   ]
 
-  // Mock data for wages
-  const wages = {
-    currentMonth: "₹16,500",
-    pendingPayments: "₹3,200",
-    lastPayment: "₹8,200 (April 15, 2023)",
-  }
-
   const viewApplicationDetails = (application: any) => {
     setSelectedApplication(application)
     setShowApplicationDetails(true)
@@ -117,8 +110,8 @@ export default function WorkerDashboard() {
         </Link>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <Card className="col-span-2 lg:col-span-2">
+      <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-1">
+        <Card className="col-span-1 lg:col-span-1">
           <CardHeader className="flex flex-row items-center gap-4">
             <Avatar className="h-16 w-16">
               <AvatarImage src="/placeholder.svg?height=64&width=64" alt={worker.name} />
@@ -153,26 +146,6 @@ export default function WorkerDashboard() {
             <Link href="/profile">
               <Button variant="outline" size="sm">
                 View Full Profile
-              </Button>
-            </Link>
-          </CardFooter>
-        </Card>
-
-        <Card className="lg:col-span-1">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Wages</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{wages.currentMonth}</div>
-            <div className="flex justify-between mt-1">
-              <p className="text-xs text-muted-foreground">Pending: {wages.pendingPayments}</p>
-              <p className="text-xs text-muted-foreground">Last: {wages.lastPayment}</p>
-            </div>
-          </CardContent>
-          <CardFooter className="pt-0">
-            <Link href="/wages">
-              <Button variant="link" size="sm" className="px-0">
-                View Wage Details
               </Button>
             </Link>
           </CardFooter>
